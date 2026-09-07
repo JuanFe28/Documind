@@ -1,0 +1,4 @@
+JUAN ALBERTO PÉREZ - INGENIERO DE CONTROL DE CALIDAD (QA)
+Título Académico: Ingeniero de Sistemas.
+Resumen de experiencia: 3 años de trayectoria estructurando y ejecutando planes de pruebas de software funcionales y de rendimiento.
+Herramientas y lenguajes clave: Automatización de pruebas web con Selenium y Cypress, pruebas de componentes unitarios en Jest, y validación estructurada de endpoints de APIs con Postman. Programación en JavaScript.

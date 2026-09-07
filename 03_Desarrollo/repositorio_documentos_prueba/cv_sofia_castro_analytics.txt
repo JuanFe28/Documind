@@ -1,0 +1,4 @@
+SOFÍA CASTRO - ANALISTA DE DATOS CORPORATIVOS
+Nivel Educativo: Tecnóloga en Sistemas.
+Experiencia: 2 años procesando datos estructurados para la toma de decisiones empresariales.
+Especialidades: Consultas SQL avanzadas para bases de datos relacionales, visualización interactiva de tableros de control en PowerBI, y automatización y limpieza estadística utilizando el stack de Python (Pandas y Numpy) y análisis en lenguaje R.

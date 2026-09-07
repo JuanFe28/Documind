@@ -1,0 +1,4 @@
+CONTRATO DE OUTSOURCING DE MESA DE AYUDA TI
+Partes: Soporte Remoto Bucaramanga y Software del Común Ltda.
+Vigencia: Término indefinido previo mutuo acuerdo.
+Incumplimiento de Soporte: Se pacta una multa del 5% del valor total mensual del contrato por cada hora en que la mesa de soporte técnico telefónico se encuentre fuera de línea en días hábiles.
