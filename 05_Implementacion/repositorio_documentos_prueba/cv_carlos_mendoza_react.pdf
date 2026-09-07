@@ -1,4 +1,4 @@
-%PDF-1.4
+%PDF-1.3
 %“Œ‹ž ReportLab Generated PDF document (opensource)
 1 0 obj
 <<
@@ -27,8 +27,8 @@ endobj
 endobj
 5 0 obj
 <<
-/Author (\(anonymous\)) /CreationDate (D:20260907000122-05'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20260907000122-05'00') /Producer (ReportLab PDF Library - \(opensource\)) 
-  /Subject (\(unspecified\)) /Title (\(anonymous\)) /Trapped /False
+/Author (anonymous) /CreationDate (D:20260907002631-05'00') /Creator (anonymous) /Keywords () /ModDate (D:20260907002631-05'00') /Producer (ReportLab PDF Library - \(opensource\)) 
+  /Subject (unspecified) /Title (untitled) /Trapped /False
 >>
 endobj
 6 0 obj
@@ -38,10 +38,19 @@ endobj
 endobj
 7 0 obj
 <<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 647
+/Length 792
 >>
 stream
-Gas2F9i'e'&;KZL(%8DcTUX;+5&R&c=4N&&9u:J\AT3CHXD8'q"j4#U3MhXe&=8OGq0\g&">O@2]bMLE]"u]qK&dWj"-W1nN2Aks6r22o-GfK]-C5l8HA\kppXET70q(h/=mTqBTgnOkY\OZEBiUBTDXp4sr^h*]/?dO&.Z5LqapPK0U-RP1e)*C:49Eb>"q:rg2k#\i=W=S7`f@,X8f>!pg-#-HZAc2fG"Z]PWQ=%!bEc=T#l-rD$>V*3ogtrBl'C_@Dpo[0FfT3K8`BJ6;#'k\CqSAJ&G6cg&*\ET-h/n)S=k/D@$t*&H%BO,cLQ9f0%/_ddk,?R+H4;WF>oX6VOs&Z41:<[O9A#H`f^B00:s\D@"hWBm_c:sbH=d,f3:_f#@2?,P<'un$#)4Xn><MmTd7SeUc`KrH\T#**Jk=B4PunOT72J@SpZ=UFRg086'G(\APrH<)^T-2N@[S#hTQf-nd:f<81b;7RIo82DVL6F^[OCp?7Pb?\i#%oo-F=0@M4,ckTF=WPRK%&YqRa?+!#OG?NUQM*Z`p!fHFPGHh*WW7S%TZ*BLW(3ksQ=(kB8=YcN/D4[dl2g"!._5I82.l\B>#*S80Nc6$6*b>(7ngB]1+_9Q764FPEMm'8je<J9QXpi6_i~>endstream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+BT /F1 11 Tf 13.2 TL ET
+BT 1 0 0 1 50 750 Tm (CARLOS MENDOZA - DESARROLLADOR FULL STACK) Tj T* ET
+BT 1 0 0 1 50 734 Tm (Tecn\363logo en Desarrollo de Software graduado de las Unidades Tecnol\363gicas de Santander.) Tj T* ET
+BT 1 0 0 1 50 718 Tm  T* ET
+BT 1 0 0 1 50 702 Tm (PERFIL PROFESIONAL: Cuento con 4 a\361os de experiencia laboral activa en el dise\361o y despliegue de aplicaciones empresariales altamente transaccionales.) Tj T* ET
+BT 1 0 0 1 50 686 Tm  T* ET
+BT 1 0 0 1 50 670 Tm (TECNOLOG\315AS DE DOMINIO: Dominio avanzado de desarrollo web utilizando el stack React en el cliente, Node.js y Express.js para las APIs de negocio, y persistencia de datos relacionales en MySQL. Uso de TypeScript para la tipificaci\363n estricta.) Tj T* ET
+ 
+endstream
 endobj
 xref
 0 8
@@ -51,12 +60,12 @@ xref
 0000000199 00000 n 
 0000000392 00000 n 
 0000000460 00000 n 
-0000000740 00000 n 
-0000000799 00000 n 
+0000000721 00000 n 
+0000000780 00000 n 
 trailer
 <<
 /ID 
-[<d0d7203915714767358ea9c4ba9ec368><d0d7203915714767358ea9c4ba9ec368>]
+[<9bec93807b39e97f4adc3b2f2f27d6d6><9bec93807b39e97f4adc3b2f2f27d6d6>]
 % ReportLab generated PDF document -- digest (opensource)
 
 /Info 5 0 R
@@ -64,5 +73,5 @@ trailer
 /Size 8
 >>
 startxref
-1536
+1622
 %%EOF

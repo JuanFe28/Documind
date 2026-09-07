@@ -1,4 +1,4 @@
-%PDF-1.4
+%PDF-1.3
 %“Œ‹ž ReportLab Generated PDF document (opensource)
 1 0 obj
 <<
@@ -27,8 +27,8 @@ endobj
 endobj
 5 0 obj
 <<
-/Author (\(anonymous\)) /CreationDate (D:20260907000122-05'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20260907000122-05'00') /Producer (ReportLab PDF Library - \(opensource\)) 
-  /Subject (\(unspecified\)) /Title (\(anonymous\)) /Trapped /False
+/Author (anonymous) /CreationDate (D:20260907002631-05'00') /Creator (anonymous) /Keywords () /ModDate (D:20260907002631-05'00') /Producer (ReportLab PDF Library - \(opensource\)) 
+  /Subject (unspecified) /Title (untitled) /Trapped /False
 >>
 endobj
 6 0 obj
@@ -38,10 +38,17 @@ endobj
 endobj
 7 0 obj
 <<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 589
+/Length 747
 >>
 stream
-Gar>C9hu]_&A@P9GfP=_A6BNV[ubE?g6=FN;l".]'76[4HL5*e;;p,.:+2e/1@j)h5/oB)qWO^07GS#H$7?ogPc%?%.*mq"TOt-&nPJRf8t96r=QSQ%Tt!uRclCBXT\:E,[ccjeNr7U$pkdkZdB]ao_$J6[A9YUkf0Aa*e!o\"Am-iXR+.MQhrilt(sh@1aT9mSTFT@bWp8(\Bg#?m%0if<*i-n7eY$_IHh^<E-cTMfNa(($<am8W_ibI!4@-5`mG#pC-8"(oKOJ!">-3hBPZ4;'f#\.?=PEO8p(B_h;[lAA@E!1.B7*1G5V@q[VA`JF$upKB32Y'ee-4"m['agughm3a$::'=:,4>'YB,`j2Yl9YKXSTNBYEAp^2s%*2IaX%DWuX628-rL[,N@.5_"2"7ca%e>("8eV.]79b8[O+QQ4EF7^oG\i98]'Fih+WjS:r/@,6P#,?cul/hn&q5^,E!BR3Sq2[;kBiM#;!hW(teM&dNWG%8n-Mhse(]2u[!h1gRB`:4+/fZKM^]Zb"N4W.&d(dGA(,q`XopO;#GSoH*[qn<"QFdNtf;(V]Lf(("<l_6Z7#@>..Yl~>endstream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+BT /F1 11 Tf 13.2 TL ET
+BT 1 0 0 1 50 750 Tm (MAR\315A RODR\315GUEZ - INGENIERA DE DEVOPS CLOUD) Tj T* ET
+BT 1 0 0 1 50 734 Tm (\332ltimo t\355tulo acad\351mico obtenido: Especialista en Redes y Telecomunicaciones de la UTS.) Tj T* ET
+BT 1 0 0 1 50 718 Tm (Trayectoria laboral: 6 a\361os liderando la transici\363n e infraestructura de aplicaciones empresariales locales a entornos cloud modernos.) Tj T* ET
+BT 1 0 0 1 50 702 Tm (Habilidades e infraestructura TI: Administraci\363n de servicios Amazon Web Services \(AWS\), automatizaci\363n de recursos mediante Terraform \(IaC\), orquestaci\363n de contenedores y clusters en Kubernetes, y pipelines de CI/CD en Jenkins bajo servidores Linux.) Tj T* ET
+ 
+endstream
 endobj
 xref
 0 8
@@ -51,12 +58,12 @@ xref
 0000000199 00000 n 
 0000000392 00000 n 
 0000000460 00000 n 
-0000000740 00000 n 
-0000000799 00000 n 
+0000000721 00000 n 
+0000000780 00000 n 
 trailer
 <<
 /ID 
-[<1326a9183ac79debec292c9711556d68><1326a9183ac79debec292c9711556d68>]
+[<1ec856405f7906ae058eda7079d759e7><1ec856405f7906ae058eda7079d759e7>]
 % ReportLab generated PDF document -- digest (opensource)
 
 /Info 5 0 R
@@ -64,5 +71,5 @@ trailer
 /Size 8
 >>
 startxref
-1478
+1577
 %%EOF

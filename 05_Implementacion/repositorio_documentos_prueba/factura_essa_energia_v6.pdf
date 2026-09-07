@@ -1,4 +1,4 @@
-%PDF-1.4
+%PDF-1.3
 %“Œ‹ž ReportLab Generated PDF document (opensource)
 1 0 obj
 <<
@@ -27,8 +27,8 @@ endobj
 endobj
 5 0 obj
 <<
-/Author (\(anonymous\)) /CreationDate (D:20260907000122-05'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20260907000122-05'00') /Producer (ReportLab PDF Library - \(opensource\)) 
-  /Subject (\(unspecified\)) /Title (\(anonymous\)) /Trapped /False
+/Author (anonymous) /CreationDate (D:20260907002631-05'00') /Creator (anonymous) /Keywords () /ModDate (D:20260907002631-05'00') /Producer (ReportLab PDF Library - \(opensource\)) 
+  /Subject (unspecified) /Title (untitled) /Trapped /False
 >>
 endobj
 6 0 obj
@@ -38,10 +38,20 @@ endobj
 endobj
 7 0 obj
 <<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 455
+/Length 631
 >>
 stream
-Gar'%c#;Sq&B4,6/)HtbBN8;!$"(62`#q_0(ud!B>\NWpB#RgX<;lDiL.\Ro)/3^>qe8MqJ:g3oCU4,?K]ebRLdAd!;O2nC'Lcrf9d;>1A!dC=oG10cdi.L""mrHfF(=^T#[<><+7tdp3E:C&F'7-fU/5g7,Ztn_Jn's00uk%<I44:>"6^glO6Djt15mTN`E]W,:AX5,DC0FNq1P_^V/pJo(3PeY;knF"!j#AO]M?C16CBkH,$^7[j3N,EGE%T;qDe=GgU))Y9_K@6#Xdd9kLT*.:HikTO,*)F\rt'6+A:.U:^4\!bA`dXp_2g1\QsU3(B1u'DQabf4'm;Y5'50KAp\5NLCSH&Y9_'I^4+.B2\JpH_,%p7c7SD4kd_sCBa\(,E[Xn1]rNf2?ORe$H[GJM0&=qD]A#-opanOVH>f;HE$Ne@aE8@PIq1(L+kpR]kWa`:L$8~>endstream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+BT /F1 11 Tf 13.2 TL ET
+BT 1 0 0 1 50 750 Tm (ELECTRIFICADORA DE SANTANDER S.A. E.S.P. - ESSA) Tj T* ET
+BT 1 0 0 1 50 734 Tm (NIT: 890.201.223-4) Tj T* ET
+BT 1 0 0 1 50 718 Tm (FACTURA DE SERVICIOS P\332BLICOS - ENERG\315A EL\311CTRICA) Tj T* ET
+BT 1 0 0 1 50 702 Tm (Fecha de Expedici\363n: 01 de Septiembre de 2026.) Tj T* ET
+BT 1 0 0 1 50 686 Tm (VALOR TOTAL DEL MES: $450,000 COP.) Tj T* ET
+BT 1 0 0 1 50 670 Tm (Detalle de Impuestos Incluidos \(IVA 19%\): $71,850 COP.) Tj T* ET
+BT 1 0 0 1 50 654 Tm (PAGO OBLIGATORIO ANTES DE: 2026-10-15. Evite suspensi\363n del servicio.) Tj T* ET
+ 
+endstream
 endobj
 xref
 0 8
@@ -51,12 +61,12 @@ xref
 0000000199 00000 n 
 0000000392 00000 n 
 0000000460 00000 n 
-0000000740 00000 n 
-0000000799 00000 n 
+0000000721 00000 n 
+0000000780 00000 n 
 trailer
 <<
 /ID 
-[<4bf8af33835b3a60381c8900486d6315><4bf8af33835b3a60381c8900486d6315>]
+[<da7a4bf17ba3cd5f4386ea22216f0396><da7a4bf17ba3cd5f4386ea22216f0396>]
 % ReportLab generated PDF document -- digest (opensource)
 
 /Info 5 0 R
@@ -64,5 +74,5 @@ trailer
 /Size 8
 >>
 startxref
-1344
+1461
 %%EOF

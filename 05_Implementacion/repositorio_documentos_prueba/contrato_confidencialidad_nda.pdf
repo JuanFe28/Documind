@@ -1,4 +1,4 @@
-%PDF-1.4
+%PDF-1.3
 %“Œ‹ž ReportLab Generated PDF document (opensource)
 1 0 obj
 <<
@@ -27,8 +27,8 @@ endobj
 endobj
 5 0 obj
 <<
-/Author (\(anonymous\)) /CreationDate (D:20260907000122-05'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20260907000122-05'00') /Producer (ReportLab PDF Library - \(opensource\)) 
-  /Subject (\(unspecified\)) /Title (\(anonymous\)) /Trapped /False
+/Author (anonymous) /CreationDate (D:20260907002631-05'00') /Creator (anonymous) /Keywords () /ModDate (D:20260907002631-05'00') /Producer (ReportLab PDF Library - \(opensource\)) 
+  /Subject (unspecified) /Title (untitled) /Trapped /False
 >>
 endobj
 6 0 obj
@@ -38,10 +38,20 @@ endobj
 endobj
 7 0 obj
 <<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 734
+/Length 947
 >>
 stream
-Gat%_bAQ&g&4Q?iMS!tf`g&)>ddA)J.0M&B&h<tiBJZ@%/d$rpWCN(uI6lRA'%AV^%06o.1O%,L#4URrE2TXblO;Zg!X'`Y)[,3[(g2_Uo6/tS-c#'U1OfO)Grs>AI$h$[SK2ItF+gXK=7KR]Of^@*0-9//BS@kS@^Wj?U3O4>k%PIQ,Q,E!Kd_4m9Rk>(8KNo/-1\l-RcbJ'aBjsVYo<&Dqp.=#hlZ*lU=8?eFi!jK]XU@H\7*oC89AYT%E$r',]F'h=uLu4B;n`^)A\'3h*C1]NK@+["'2O4S'8K>eh4/aL5aMkBtrLP)+7YM[o*rs\4=P<iRRoS9'NnpD/*pdQ+]Y]H8^c4MArWg[A4-f=:aT4ZWnj;;d;Zhs1)D26[of)@>O7\#1;JKEBd<ZFM>c[3_eth<m,ad""D&Q1d0O^97g+^D(6/R&#Z+QctXd5<YcPk7Ra=g<L>lg#O(:#!dL?]G:dTIcmc>I3!i8)Q/a?i&fURRP$`b1E#RpEKUPRbc(XYsR`^N_Ygu.!Y%#rHoC.@4'C[>Mk:Jn]Br\diH#WQ7l2`h8RN;2E=S5o?i@#0#>&E=>'onojnNq+N2P$=&j-^g'S@-H7Y98VgI@a)](kcD>XmEK,5j/oUAjrPD4#UiQYoQrW>H%t4e;%g@rBSnZ\YjKJ/26V!^:d75^7p_s24Kq-$E67.bjfU:6L9-d]!G\hY%.C,=+V*0FpjMeiG$4,$gN^C8H~>endstream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+BT /F1 11 Tf 13.2 TL ET
+BT 1 0 0 1 50 750 Tm (ACUERDO DE CONFIDENCIALIDAD Y NO DIVULGACI\323N \(NDA\)) Tj T* ET
+BT 1 0 0 1 50 734 Tm  T* ET
+BT 1 0 0 1 50 718 Tm (El presente acuerdo regula el intercambio de secretos comerciales entre el equipo de desarrollo de DocuMind Dev Team y el cliente corporativo Inversiones Santander S.A.) Tj T* ET
+BT 1 0 0 1 50 702 Tm  T* ET
+BT 1 0 0 1 50 686 Tm (DURACI\323N DE LAS OBLIGACIONES: La reserva de la informaci\363n confidencial se mantendr\341 vigente por un t\351rmino de cinco \(5\) a\361os a partir de la firma del presente documento.) Tj T* ET
+BT 1 0 0 1 50 670 Tm  T* ET
+BT 1 0 0 1 50 654 Tm (PENALIDAD POR FILTRACI\323N: La revelaci\363n no autorizada de c\363digo fuente o bases de datos dar\341 lugar a una penalizaci\363n tasada en una indemnizaci\363n de da\361os equivalente a 50 SMMLV, sin perjuicio de las acciones penales a que haya lugar.) Tj T* ET
+ 
+endstream
 endobj
 xref
 0 8
@@ -51,12 +61,12 @@ xref
 0000000199 00000 n 
 0000000392 00000 n 
 0000000460 00000 n 
-0000000740 00000 n 
-0000000799 00000 n 
+0000000721 00000 n 
+0000000780 00000 n 
 trailer
 <<
 /ID 
-[<07c2eda136c7351b2c5759d74e6c2c48><07c2eda136c7351b2c5759d74e6c2c48>]
+[<01974d5ee24a13257505c503e1b49fb1><01974d5ee24a13257505c503e1b49fb1>]
 % ReportLab generated PDF document -- digest (opensource)
 
 /Info 5 0 R
@@ -64,5 +74,5 @@ trailer
 /Size 8
 >>
 startxref
-1623
+1777
 %%EOF

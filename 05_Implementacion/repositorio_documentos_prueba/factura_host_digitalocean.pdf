@@ -1,4 +1,4 @@
-%PDF-1.4
+%PDF-1.3
 %“Œ‹ž ReportLab Generated PDF document (opensource)
 1 0 obj
 <<
@@ -27,8 +27,8 @@ endobj
 endobj
 5 0 obj
 <<
-/Author (\(anonymous\)) /CreationDate (D:20260907000122-05'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20260907000122-05'00') /Producer (ReportLab PDF Library - \(opensource\)) 
-  /Subject (\(unspecified\)) /Title (\(anonymous\)) /Trapped /False
+/Author (anonymous) /CreationDate (D:20260907002631-05'00') /Creator (anonymous) /Keywords () /ModDate (D:20260907002631-05'00') /Producer (ReportLab PDF Library - \(opensource\)) 
+  /Subject (unspecified) /Title (untitled) /Trapped /False
 >>
 endobj
 6 0 obj
@@ -38,10 +38,19 @@ endobj
 endobj
 7 0 obj
 <<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 399
+/Length 531
 >>
 stream
-Gar'%92EDi'SZ;['k`(()Q5H/XjA)QLJ<m$(g4*]L=(sg^![D1q!1XY'+C@ogj@@kEg+DW^q^mh3A;5YT5ef\iY=Rp",I,X_DsWYLZ<B)0^t`UkN%T@+'NID60&KcBJWb];-t3`2fpFh4;">W)G`jr`/F8!Ju<]@P3!\<l"6:#e*Sa*4!<t<>p]V/WU.0[b3])R0+_&Oq8(,X6ghKNi4Fs<rp[eK>!J#cPqKh11/ueVWqlSaC^I[<-;g9D)B,KOX=TTu'df_?FQm,;SuJps93,Y$F=?75,'4kgemjX^:07J.)f9_k$l-@*7^<ulW&*r%9n^g-mkGki!NSon&G!LVn8FLho-58JJim7Pf%)7,i%ZnOZXKK4()D+:'l.H1<JOq*kH#[`^ZrRZQ2~>endstream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+BT /F1 11 Tf 13.2 TL ET
+BT 1 0 0 1 50 750 Tm (DIGITALOCEAN CLOUD HOSTING SERVICES) Tj T* ET
+BT 1 0 0 1 50 734 Tm (NIT Facturaci\363n Colombia: 912.443.001-9) Tj T* ET
+BT 1 0 0 1 50 718 Tm (Factura de servicios de c\363mputo en la nube e instancias Docker.) Tj T* ET
+BT 1 0 0 1 50 702 Tm (Monto total cobrado: $520,000 COP.) Tj T* ET
+BT 1 0 0 1 50 686 Tm (Retenciones e IVA del 19%: $83,016 COP.) Tj T* ET
+BT 1 0 0 1 50 670 Tm (Plazo m\341ximo de cobro autom\341tico: 2026-09-10.) Tj T* ET
+ 
+endstream
 endobj
 xref
 0 8
@@ -51,12 +60,12 @@ xref
 0000000199 00000 n 
 0000000392 00000 n 
 0000000460 00000 n 
-0000000740 00000 n 
-0000000799 00000 n 
+0000000721 00000 n 
+0000000780 00000 n 
 trailer
 <<
 /ID 
-[<a3aa127c05ec340786a5d2712b108e1f><a3aa127c05ec340786a5d2712b108e1f>]
+[<3889021bd06a965649fb0536e0013a17><3889021bd06a965649fb0536e0013a17>]
 % ReportLab generated PDF document -- digest (opensource)
 
 /Info 5 0 R
@@ -64,5 +73,5 @@ trailer
 /Size 8
 >>
 startxref
-1288
+1361
 %%EOF

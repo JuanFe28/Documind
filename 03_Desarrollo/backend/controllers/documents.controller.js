@@ -20,8 +20,33 @@ async function extraerTexto(filePath, extension) {
 
   if (extension === '.pdf') {
     const dataBuffer = fs.readFileSync(filePath);
-    const data = await pdfParse(dataBuffer);
-    return data.text;
+    try {
+      const data = await pdfParse(dataBuffer);
+      if (data && data.text && data.text.trim().length > 0) {
+        return data.text;
+      }
+    } catch (e) {
+      console.warn('[PDF Parser] Extrayendo contenido directo del buffer:', e.message);
+    }
+
+    // Extracción limpia de texto plano legible del PDF
+    const rawContent = dataBuffer.toString('latin1');
+    const lineas = rawContent.split('\n');
+    const textoExtraido = [];
+
+    for (const linea of lineas) {
+      const match = linea.match(/\((.+?)\)\s*Tj/);
+      if (match) {
+        textoExtraido.push(match[1]);
+      }
+    }
+
+    if (textoExtraido.length > 0) {
+      return textoExtraido.join('\n');
+    }
+
+    // Fallback general: texto imprimible
+    return rawContent.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F]/g, ' ').replace(/\s+/g, ' ').trim();
   }
 
   if (extension === '.docx') {

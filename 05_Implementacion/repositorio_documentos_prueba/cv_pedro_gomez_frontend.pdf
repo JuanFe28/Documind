@@ -1,4 +1,4 @@
-%PDF-1.4
+%PDF-1.3
 %“Œ‹ž ReportLab Generated PDF document (opensource)
 1 0 obj
 <<
@@ -27,8 +27,8 @@ endobj
 endobj
 5 0 obj
 <<
-/Author (\(anonymous\)) /CreationDate (D:20260907000122-05'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20260907000122-05'00') /Producer (ReportLab PDF Library - \(opensource\)) 
-  /Subject (\(unspecified\)) /Title (\(anonymous\)) /Trapped /False
+/Author (anonymous) /CreationDate (D:20260907002631-05'00') /Creator (anonymous) /Keywords () /ModDate (D:20260907002631-05'00') /Producer (ReportLab PDF Library - \(opensource\)) 
+  /Subject (unspecified) /Title (untitled) /Trapped /False
 >>
 endobj
 6 0 obj
@@ -38,10 +38,17 @@ endobj
 endobj
 7 0 obj
 <<
-/Filter [ /ASCII85Decode /FlateDecode ] /Length 559
+/Length 675
 >>
 stream
-Gar'&5u/FS&;BTM/)HC4)R=/b-oW8A9,.a!3`T2A1>!6sOk0fl)bPU.jUIqa06=ATqqfP18rPJo3E4f8QO:db--?n"%Ece+!jt:qMO.eU.<0NkBpHZV96$rfXgt#tTXqtMfJCO8OakCW:H5kfkKOWHf%!?7>Q;WSbj4tsBpO[r`I-@s\lmmhqJM>Dc11)>-`AVi%WP=ce/Roi.jmCg;%a'&EJFAK2]TduZ=&Hu6s`sDd_dbVH*H)6`.<#nSWBP\aG+3^Z-,I.+`O(l-D80q@G$A_j!2X>UR.PcR=Qh*[is"!KKf+?'9JpN6qMP9O+rT5iLc<Unsc0>YQWCCUHFDK6O'alpeNi+[I_s6XfKoLMU7Z44N![6L#B*+=cSL/`H_#HloXlec_G?q)qqaBoAB5UdV'RiW8h2p4P&&YHkHhSh+)+8`4h*b=)E;K5>ptdL+P@pF65<&pdR>[FcbbhQ\Y0WKD%bmU.NP>RT9o\]:@fBBYl!2I:`m@L'#DVaNb_7DHJL)WnYKAhJh#ReU@hi0H\q7naPFuQ07ta*XWU2!*B9I9)~>endstream
+1 0 0 1 0 0 cm  BT /F1 12 Tf 14.4 TL ET
+BT /F1 11 Tf 13.2 TL ET
+BT 1 0 0 1 50 750 Tm (PEDRO G\323MEZ - DESARROLLADOR FRONTEND UI/UX) Tj T* ET
+BT 1 0 0 1 50 734 Tm (Estudios Universitarios: Profesional en Dise\361o de Medios Interactivos.) Tj T* ET
+BT 1 0 0 1 50 718 Tm (Resumen de carrera: 4 a\361os dedicados al maquetado de interfaces de usuario adaptativas, optimizando la accesibilidad web.) Tj T* ET
+BT 1 0 0 1 50 702 Tm (Tecnolog\355as clave: Desarrollo web fluido utilizando Vue.js y SSR en Nuxt.js. Estilizado \341gil con TailwindCSS, control del estado web en JavaScript nativo y codificaci\363n sem\341ntica bajo est\341ndares modernos de HTML5 y CSS3.) Tj T* ET
+ 
+endstream
 endobj
 xref
 0 8
@@ -51,12 +58,12 @@ xref
 0000000199 00000 n 
 0000000392 00000 n 
 0000000460 00000 n 
-0000000740 00000 n 
-0000000799 00000 n 
+0000000721 00000 n 
+0000000780 00000 n 
 trailer
 <<
 /ID 
-[<453e3357cd84782462a0c19d0b716ae4><453e3357cd84782462a0c19d0b716ae4>]
+[<8abdecf4e4f4f8720f48e0772992527c><8abdecf4e4f4f8720f48e0772992527c>]
 % ReportLab generated PDF document -- digest (opensource)
 
 /Info 5 0 R
@@ -64,5 +71,5 @@ trailer
 /Size 8
 >>
 startxref
-1448
+1505
 %%EOF

@@ -54,15 +54,39 @@ export async function consultarRAG(req, res) {
       ${contexto}
     `;
 
-    // 4. Generar respuesta con Gemini 1.5 Flash
-    const chatResponse = await ai.models.generateContent({
-      model: 'gemini-3.5-flash',
-      contents: [{ role: 'user', parts: [{ text: `Pregunta: ${query}` }] }],
-      config: {
-        systemInstruction: systemPrompt,
-        temperature: 0.1,
-      },
-    });
+    // 4. Generar respuesta con Gemini 3.5 Flash con reintentos
+    let respuestaTexto = '';
+    let exitoGemini = false;
+
+    for (let intento = 1; intento <= 3; intento++) {
+      try {
+        const chatResponse = await ai.models.generateContent({
+          model: 'gemini-3.5-flash',
+          contents: [{ role: 'user', parts: [{ text: `Pregunta: ${query}` }] }],
+          config: {
+            systemInstruction: systemPrompt,
+            temperature: 0.1,
+          },
+        });
+        respuestaTexto = chatResponse.text;
+        exitoGemini = true;
+        break;
+      } catch (errGen) {
+        if (intento < 3 && (errGen?.status === 503 || errGen?.status === 429 || (errGen?.message && (errGen.message.includes('503') || errGen.message.includes('demand'))))) {
+          console.warn(`[Chat RAG] Reintento ${intento}/3 tras error 503/429...`);
+          await new Promise((r) => setTimeout(r, 1500 * intento));
+        } else {
+          console.warn('[Chat RAG] Fallback a respuesta de contexto documental directo.');
+          break;
+        }
+      }
+    }
+
+    if (!exitoGemini || !respuestaTexto) {
+      // Fallback amigable basado directamente en los fragmentos encontrados
+      const primerMatch = matches[0];
+      respuestaTexto = `Con base en el documento **${primerMatch.metadata.nombre_archivo}** (Pág. ${primerMatch.metadata.page_num}):\n\n"${primerMatch.metadata.text_chunk}"`;
+    }
 
     // 5. Construir lista de fuentes citadas para el frontend
     const fuentesCitadas = matches.map((match) => ({
@@ -74,7 +98,7 @@ export async function consultarRAG(req, res) {
 
     return res.status(200).json({
       ok: true,
-      respuesta: chatResponse.text,
+      respuesta: respuestaTexto,
       fuentes_citadas: fuentesCitadas,
     });
   } catch (error) {
