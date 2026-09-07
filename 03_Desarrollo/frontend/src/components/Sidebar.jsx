@@ -36,7 +36,14 @@ export default function Sidebar({ onRepoSelect, selectedRepo }) {
     try {
       setLoadingRepos(true);
       const res = await repositoriesAPI.list();
-      setRepositorios(res.data.repositorios || []);
+      const repos = res.data.repositorios || [];
+      setRepositorios(repos);
+      if (repos.length > 0 && onRepoSelect) {
+        // Si no hay repositorio seleccionado o el actual ya no está en la lista permitida
+        if (!selectedRepo || !repos.some((r) => r.id === selectedRepo.id)) {
+          onRepoSelect(repos[0]);
+        }
+      }
     } catch {
       // Error silencioso en sidebar
     } finally {
@@ -46,7 +53,7 @@ export default function Sidebar({ onRepoSelect, selectedRepo }) {
 
   useEffect(() => {
     cargarRepositorios();
-  }, []);
+  }, [user?.id]);
 
   const handleLogout = () => {
     logout();

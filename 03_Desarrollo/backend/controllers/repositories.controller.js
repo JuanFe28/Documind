@@ -20,17 +20,21 @@ export async function listarRepositorios(req, res) {
       `;
       params = [];
     } else {
+      let depto = 'Legal';
+      if (req.user.rol === 'FINANCIERO') depto = 'Financiero';
+      if (req.user.rol === 'RECLUTADOR') depto = 'Recursos Humanos';
+
       sql = `
         SELECT r.*, u.nombre AS creado_por,
                COUNT(d.id) AS total_documentos
         FROM repositorios r
         JOIN usuarios u ON r.usuario_id = u.id
         LEFT JOIN documentos d ON r.id = d.repositorio_id
-        WHERE r.usuario_id = ?
+        WHERE r.departamento = ? OR r.usuario_id = ?
         GROUP BY r.id
         ORDER BY r.creado_en DESC
       `;
-      params = [req.user.id];
+      params = [depto, req.user.id];
     }
 
     const repositorios = await db.query(sql, params);

@@ -226,25 +226,37 @@ export async function listarDocumentos(req, res) {
       FROM documentos d
       JOIN repositorios r ON d.repositorio_id = r.id
     `;
+    const conditions = [];
     const params = [];
 
+    if (req.user.rol !== 'ADMIN') {
+      let depto = 'Legal';
+      if (req.user.rol === 'FINANCIERO') depto = 'Financiero';
+      if (req.user.rol === 'RECLUTADOR') depto = 'Recursos Humanos';
+      conditions.push('(r.departamento = ? OR r.usuario_id = ?)');
+      params.push(depto, req.user.id);
+    }
+
     if (repositorio_id) {
-      sql += ' WHERE d.repositorio_id = ?';
+      conditions.push('d.repositorio_id = ?');
       params.push(repositorio_id);
     }
 
+    const whereClause = conditions.length > 0 ? ` WHERE ${conditions.join(' AND ')}` : '';
+    sql += whereClause;
     sql += ' ORDER BY d.creado_en DESC LIMIT ? OFFSET ?';
     params.push(parseInt(limit), offset);
 
     const documentos = await db.query(sql, params);
 
     // Contar total
-    let countSql = 'SELECT COUNT(*) AS total FROM documentos';
-    const countParams = [];
-    if (repositorio_id) {
-      countSql += ' WHERE repositorio_id = ?';
-      countParams.push(repositorio_id);
-    }
+    let countSql = `
+      SELECT COUNT(*) AS total 
+      FROM documentos d
+      JOIN repositorios r ON d.repositorio_id = r.id
+      ${whereClause}
+    `;
+    const countParams = params.slice(0, conditions.length === 0 ? 0 : (req.user.rol !== 'ADMIN' ? (repositorio_id ? 3 : 2) : 1));
     const [{ total }] = await db.query(countSql, countParams);
 
     return res.status(200).json({

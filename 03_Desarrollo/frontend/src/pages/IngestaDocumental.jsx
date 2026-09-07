@@ -238,11 +238,17 @@ export default function IngestaDocumental({ selectedRepo }) {
           </div>
         ) : (
           <>
-            <UploadCloud className={`w-16 h-16 mb-4 transition-colors ${dragActive ? 'text-indigo-600' : 'text-indigo-400'}`} />
+            {selectedRepo && (
+              <div className="mb-3 px-3 py-1 bg-indigo-50 border border-indigo-100 rounded-full text-xs font-semibold text-indigo-700 inline-flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                Destino: {selectedRepo.nombre} ({selectedRepo.departamento})
+              </div>
+            )}
+            <UploadCloud className={`w-16 h-16 mb-3 transition-colors ${dragActive ? 'text-indigo-600' : 'text-indigo-400'}`} />
             <h3 className="text-lg font-semibold text-slate-700 mb-1">
               {dragActive ? '¡Suelte el archivo aquí!' : 'Arrastre y suelte sus archivos aquí'}
             </h3>
-            <p className="text-slate-400 text-sm mb-5">
+            <p className="text-slate-400 text-sm mb-4">
               Soporta PDF, DOCX, TXT · Máximo 15 MB (Límite UTS)
             </p>
             <button
