@@ -363,24 +363,33 @@ function generarVectorHash768(texto) {
 }
 
 /**
- * Vectoriza un chunk de texto con timeout de 3.5 segundos y fallback.
+ * Vectoriza un chunk de texto con failover entre modelos y timeout controlado.
  */
 export async function generarEmbeddingGoogle(textoChunk) {
-  try {
-    const response = await conTimeout(
-      ai.models.embedContent({
-        model: 'gemini-embedding-2',
-        contents: textoChunk,
-        config: {
-          outputDimensionality: 768,
-        },
-      }),
-      3500
-    );
-    return response.embeddings[0].values;
-  } catch (error) {
-    return generarVectorHash768(textoChunk);
+  const candidateEmbeddingModels = ['gemini-embedding-2', 'text-embedding-004'];
+
+  for (const modelName of candidateEmbeddingModels) {
+    try {
+      const response = await conTimeout(
+        ai.models.embedContent({
+          model: modelName,
+          contents: textoChunk,
+          config: {
+            outputDimensionality: 768,
+          },
+        }),
+        3500
+      );
+      if (response && response.embeddings && response.embeddings[0]?.values) {
+        return response.embeddings[0].values;
+      }
+    } catch (error) {
+      console.warn(`[Gemini Embedding] Modelo ${modelName} no disponible. Probando alternativa...`);
+    }
   }
+
+  // Fallback determinístico offline de 768 dimensiones
+  return generarVectorHash768(textoChunk);
 }
 
 /**
