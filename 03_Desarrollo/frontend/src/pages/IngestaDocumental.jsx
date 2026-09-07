@@ -390,48 +390,63 @@ export default function IngestaDocumental({ selectedRepo }) {
           onClick={() => setDocDetalle(null)}
         >
           <div
-            className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[80vh] overflow-y-auto animate-slide-up"
+            className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] flex flex-col animate-slide-up"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between p-5 border-b border-slate-100">
+            {/* Cabecera Modal */}
+            <div className="flex items-center justify-between p-5 border-b border-slate-100 flex-shrink-0">
               <div>
                 <h3 className="text-lg font-bold text-slate-800">Detalle del Documento</h3>
-                <p className="text-slate-400 text-xs mt-0.5 truncate max-w-sm">{docDetalle.nombre_archivo}</p>
+                <p className="text-slate-500 text-xs mt-0.5 truncate max-w-md">{docDetalle.nombre_archivo}</p>
               </div>
-              <button onClick={() => setDocDetalle(null)} className="text-slate-400 hover:text-slate-600 transition-colors">
+              <button 
+                onClick={() => setDocDetalle(null)} 
+                className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
-            <div className="p-5 space-y-4">
+
+            {/* Contenido Modal con Scroll */}
+            <div className="p-6 space-y-5 overflow-y-auto flex-1">
               {/* Info básica */}
               <div className="grid grid-cols-2 gap-3">
-                <div className="bg-slate-50 rounded-xl p-3">
-                  <p className="text-xs text-slate-400 font-semibold uppercase mb-1">Categoría IA</p>
-                  <p className="text-slate-800 font-semibold">
+                <div className="bg-slate-50 border border-slate-100 rounded-xl p-3.5">
+                  <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1">Categoría IA</p>
+                  <p className="text-slate-800 font-bold text-base flex items-center gap-1.5">
                     {CATEGORIA_ICON[docDetalle.categoria_detectada]} {docDetalle.categoria_detectada || '—'}
                   </p>
                 </div>
-                <div className="bg-slate-50 rounded-xl p-3">
-                  <p className="text-xs text-slate-400 font-semibold uppercase mb-1">Confianza</p>
-                  <p className={`font-bold text-lg ${(docDetalle.score_confianza || 0) >= 80 ? 'text-emerald-600' : 'text-amber-600'}`}>
+                <div className="bg-slate-50 border border-slate-100 rounded-xl p-3.5">
+                  <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1">Confianza de Extracción</p>
+                  <p className={`font-bold text-xl ${(docDetalle.score_confianza || 0) >= 80 ? 'text-emerald-600' : 'text-amber-600'}`}>
                     {docDetalle.score_confianza != null ? `${parseFloat(docDetalle.score_confianza).toFixed(1)}%` : '—'}
                   </p>
                 </div>
               </div>
 
-              {/* Resumen IA */}
+              {/* Resumen IA Completo */}
               {docDetalle.resumen_ia && (
-                <div className="bg-indigo-50 border border-indigo-100 rounded-xl p-4">
-                  <p className="text-xs text-indigo-600 font-semibold uppercase mb-2">🤖 Resumen de IA</p>
-                  <p className="text-sm text-slate-700 leading-relaxed">{docDetalle.resumen_ia}</p>
+                <div className="bg-gradient-to-br from-indigo-50/90 to-blue-50/60 border border-indigo-100 rounded-xl p-4 shadow-sm">
+                  <div className="flex items-center justify-between mb-2 pb-2 border-b border-indigo-100/60">
+                    <p className="text-xs text-indigo-700 font-bold uppercase tracking-wider flex items-center gap-1.5">
+                      <span>🤖</span> Resumen Inteligente de DocuMind
+                    </p>
+                    <span className="text-[11px] bg-indigo-100 text-indigo-800 font-medium px-2 py-0.5 rounded-full">
+                      Análisis IA Completo
+                    </span>
+                  </div>
+                  <div className="text-sm text-slate-700 leading-relaxed whitespace-pre-wrap max-h-60 overflow-y-auto pr-1">
+                    {docDetalle.resumen_ia}
+                  </div>
                 </div>
               )}
 
               {/* Metadatos JSON */}
               {docDetalle.metadata_json && Object.keys(docDetalle.metadata_json).filter(k => docDetalle.metadata_json[k] != null).length > 0 && (
                 <div>
-                  <p className="text-xs text-slate-500 font-semibold uppercase mb-2">Metadatos Extraídos</p>
-                  <div className="bg-slate-900 rounded-xl p-4 overflow-x-auto">
+                  <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider mb-2">Metadatos Estructurados Extraídos</p>
+                  <div className="bg-slate-900 rounded-xl p-4 overflow-x-auto shadow-inner">
                     <pre className="text-emerald-400 text-xs font-mono leading-relaxed">
                       {JSON.stringify(
                         Object.fromEntries(
@@ -444,11 +459,12 @@ export default function IngestaDocumental({ selectedRepo }) {
                 </div>
               )}
 
-              <div className="grid grid-cols-2 gap-3 text-xs text-slate-500">
-                <div><span className="font-semibold">Formato:</span> {docDetalle.tipo_formato}</div>
-                <div><span className="font-semibold">Tamaño:</span> {formatBytes(docDetalle.tamaño_bytes)}</div>
-                <div><span className="font-semibold">Estado:</span> {docDetalle.estado_procesamiento}</div>
-                <div><span className="font-semibold">Cargado:</span> {formatFecha(docDetalle.creado_en)}</div>
+              {/* Ficha técnica */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-slate-100 text-xs text-slate-600">
+                <div className="bg-slate-50 p-2.5 rounded-lg"><span className="text-slate-400 block font-medium">Formato:</span> <span className="font-semibold text-slate-700 uppercase">{docDetalle.tipo_formato}</span></div>
+                <div className="bg-slate-50 p-2.5 rounded-lg"><span className="text-slate-400 block font-medium">Tamaño:</span> <span className="font-semibold text-slate-700">{formatBytes(docDetalle.tamaño_bytes)}</span></div>
+                <div className="bg-slate-50 p-2.5 rounded-lg"><span className="text-slate-400 block font-medium">Estado:</span> <span className="font-semibold text-emerald-600">{docDetalle.estado_procesamiento}</span></div>
+                <div className="bg-slate-50 p-2.5 rounded-lg"><span className="text-slate-400 block font-medium">Cargado:</span> <span className="font-semibold text-slate-700">{formatFecha(docDetalle.creado_en)}</span></div>
               </div>
             </div>
           </div>

@@ -6,14 +6,13 @@ import db from '../config/db.js';
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 const CANDIDATE_MODELS = [
-  'gemini-flash-latest',
-  'gemini-3.5-flash',
   'gemini-3.1-flash-lite',
-  'gemini-3.6-flash',
-  'gemini-3.7-flash',
+  'gemini-3.5-flash-lite',
+  'gemini-2.5-flash-lite',
+  'gemini-flash-latest',
 ];
 
-function conTimeout(promesa, ms = 4000) {
+function conTimeout(promesa, ms = 7000) {
   let timer;
   const timeout = new Promise((_, reject) => {
     timer = setTimeout(() => reject(new Error(`Timeout tras ${ms}ms`)), ms);
@@ -22,42 +21,68 @@ function conTimeout(promesa, ms = 4000) {
 }
 
 /**
- * Generador fluido y analítico de respaldo que brinda contexto, alternativas y recomendaciones.
+ * Generador contextual y dinámico de respaldo si no hay conectividad externa.
  */
 function generarRespuestaAnaliticaRespaldo(match, query) {
   const texto = match ? match.metadata.text_chunk : '';
   const archivo = match ? match.metadata.nombre_archivo : '';
   const pag = match ? match.metadata.page_num : 1;
-
-  let respuesta = `### 📋 Análisis y Recomendaciones de DocuMind\n\n`;
+  const lower = (texto + ' ' + query).toLowerCase();
 
   if (match) {
-    respuesta += `He analizado la información disponible en el documento **${archivo}** (Pág. ${pag}) en relación con tu consulta:\n\n`;
+    let tipo = 'Documento';
+    let alternativas = [];
 
-    const parrafos = texto
+    if (lower.includes('experiencia') || lower.includes('perfil') || lower.includes('desarrollador') || lower.includes('qa') || lower.includes('ingenier') || archivo.toLowerCase().includes('cv')) {
+      tipo = 'Perfil Profesional / Hoja de Vida';
+      alternativas = [
+        '**Evaluación Técnica:** Coordinar una prueba práctica o entrevista técnica enfocada en sus herramientas principales.',
+        '**Validación de Experiencia:** Contrastar las referencias laborales y proyectos anteriores del postulante.',
+        '**Alineación Salarial y Disponibilidad:** Verificar expectativas de compensación y fecha estimada de incorporación.',
+      ];
+    } else if (lower.includes('factura') || lower.includes('nit') || lower.includes('valor total') || lower.includes('pago')) {
+      tipo = 'Factura / Documento Contable';
+      alternativas = [
+        '**Cruce con Orden de Compra:** Validar los ítems facturados con la orden de servicio o cotización aprobada.',
+        '**Programación de Pago:** Registrar la fecha límite de vencimiento en tesorería para evitar cobros de mora.',
+        '**Verificación Fiscal:** Comprobar la validez del NIT y el desglose de impuestos (IVA/Retenciones).',
+      ];
+    } else {
+      tipo = 'Contrato / Documento Legal';
+      alternativas = [
+        '**Revisión de Cláusulas:** Analizar los compromisos, plazos y condiciones acordadas entre las partes.',
+        '**Seguimiento de Entregables:** Monitorear el cumplimiento del cronograma y las obligaciones estipuladas.',
+        '**Soporte Documental:** Archivar las actas de inicio y acuerdos complementarios en el repositorio.',
+      ];
+    }
+
+    let resp = `### 📋 Análisis de ${tipo}: ${archivo}\n\n`;
+    resp += `A partir de la información registrada en **${archivo}** (Pág. ${pag}):\n\n`;
+
+    const lineas = texto
       .split('\n')
-      .map((p) => p.trim())
-      .filter((p) => p.length > 15);
+      .map((l) => l.trim())
+      .filter((l) => l.length > 20)
+      .slice(0, 5);
 
-    parrafos.forEach((p) => {
-      respuesta += `> "${p}"\n\n`;
+    if (lineas.length > 0) {
+      lineas.forEach((l) => {
+        resp += `> "${l}"\n\n`;
+      });
+    } else {
+      resp += `> "${texto.slice(0, 300)}..."\n\n`;
+    }
+
+    resp += `#### 💡 Recomendaciones y Siguientes Pasos:\n`;
+    alternativas.forEach((alt, idx) => {
+      resp += `${idx + 1}. ${alt}\n`;
     });
-
-    respuesta += `#### 💡 Alternativas y Cursos de Acción Recomendados:\n`;
-    respuesta += `1. **Aplicación de términos pactados:** Evaluar la activación formal de las cláusulas contractuales o plazos estipulados.\n`;
-    respuesta += `2. **Negociación o acuerdo conciliatorio:** Si se busca mantener la relación comercial, proponer un cronograma de compensación o ajuste de entregables.\n`;
-    respuesta += `3. **Auditoría documental:** Contrastar este registro con las actas de seguimiento en el repositorio para contar con soporte probatorio.\n\n`;
-    respuesta += `*(Fuente citada: ${archivo}, Pág. ${pag})*`;
-  } else {
-    respuesta += `¡Hola! Como asistente de inteligencia artificial de DocuMind, estoy listo para apoyarte con análisis documental, comparativas y sugerencias estratégicas.\n\n`;
-    respuesta += `#### 🎯 ¿Cómo podemos abordar tu consulta?\n`;
-    respuesta += `• Puedes pedirme **analizar penalizaciones o vigencias** de cualquier contrato.\n`;
-    respuesta += `• Puedo **comparar montos, vencimientos e impuestos** en facturas de proveedores.\n`;
-    respuesta += `• Puedo **evaluar y rankear candidatos** según tecnologías y experiencia en hojas de vida.\n\n`;
-    respuesta += `Dime qué archivo o escenario específico deseas examinar y te daré un desglose detallado con opciones y alternativas.`;
+    resp += `\n*(Fuente de consulta: ${archivo}, Pág. ${pag})*`;
+    return resp;
   }
 
-  return respuesta;
+  // Respuesta a consulta abierta sin documento específico
+  return `¡Hola! Soy **DocuMind**, tu asistente inteligente de gestión y análisis documental.\n\nPuedo ayudarte en tiempo real con:\n- 📄 **Análisis y comparación** de contratos, facturas y hojas de vida.\n- 🔍 **Búsqueda contextual profunda** en todos tus repositorios empresariales.\n- 💡 **Recomendaciones estratégicas** y resolución de dudas técnicas, comerciales o legales.\n\n¿En qué documento o tema te gustaría que trabajemos ahora?`;
 }
 
 /**
@@ -74,14 +99,14 @@ export async function consultarRAG(req, res) {
   try {
     // 1. Vectorizar la consulta y buscar contexto en Pinecone
     const queryVector = await generarEmbeddingGoogle(query);
-    let matches = await queryVectores(queryVector, repositorio_id ? parseInt(repositorio_id) : null, 3);
+    let matches = await queryVectores(queryVector, repositorio_id ? parseInt(repositorio_id) : null, 4);
 
     // Búsqueda global si el repo local no contiene coincidencias
     if (matches.length === 0 && repositorio_id) {
-      matches = await queryVectores(queryVector, null, 3);
+      matches = await queryVectores(queryVector, null, 4);
     }
 
-    const MIN_SCORE = 0.60;
+    const MIN_SCORE = 0.58;
     const relevantMatches = matches.filter((m) => m.score >= MIN_SCORE);
 
     let contextoDocumental = '';
@@ -94,19 +119,23 @@ export async function consultarRAG(req, res) {
         .join('\n\n');
     }
 
-    // 2. System Prompt conversacional de alto nivel (como ChatGPT / Gemini libre)
+    // 2. System Prompt conversacional de alto nivel (libre, natural, reflexivo)
     const systemPrompt = `
-      Eres 'DocuMind', un asistente de inteligencia artificial conversacional de última generación, altamente analítico, elocuente y resolutivo.
+      Eres 'DocuMind', un asistente de inteligencia artificial avanzado, natural, elocuente y altamente resolutivo.
+      
+      INSTRUCCIONES CLAVE DE RESPUESTA:
+      1. SÉ NATURAL Y HUMANO: Evita sonar como una plantilla fija o un bot programado. Responde con fluidez, estilo conversacional fresco y adaptado al tema.
+      2. ANALIZA EL CONTENIDO REAL:
+         - Si preguntan por una persona u hoja de vida: evalúa su perfil, fortalezas, tecnologías y adecuación para puestos.
+         - Si preguntan por una factura: analiza montos, desglose de impuestos, pagos y fechas de vencimiento.
+         - Si preguntan por un contrato: interpreta cláusulas, obligaciones, plazos y riesgos legales.
+         - Si es una pregunta general o fuera de los archivos: responde con inteligencia general, de forma útil, creativa y cordial.
+      3. APORTA VALOR Y ALTERNATIVAS: No te limites a repetir fragmentos de texto. Sintetiza la información, explica qué significa y propone 2 o 3 alternativas o cursos de acción claros según el contexto.
+      4. REFERENCIAS: Cuando uses información de un documento, menciona naturalmente de qué archivo proviene (ej: "Según lo registrado en el CV de Juan Pérez...").
+      5. FORMATO: Emplea Markdown limpio con negritas, viñetas y títulos claros cuando amerite para que sea muy legible.
+      6. IDIOMA: Responde en español impecable.
 
-      Tu Misión:
-      - Conversa de forma fluida, natural, inteligente y humana. No des respuestas robóticas ni te limites a copiar texto.
-      - Analiza el contexto de fondo, sintetiza los hallazgos y ofrece SIEMPRE alternativas, recomendaciones prácticas y soluciones al usuario.
-      - Si hay Documentos disponibles: Utilízalos como base fáctica sólida, interpreta lo que significan para la empresa y explica los siguientes pasos o alternativas disponibles. Menciona siempre el documento fuente de apoyo.
-      - Si NO hay Documentos específicos o es una consulta abierta/saludo: Responde de forma cálida, reflexiva y creativa, ofreciendo ideas útiles y explicando cómo DocuMind puede asistir en el análisis.
-      - Formato: Usa Markdown atractivo (encabezados claros, negritas, viñetas explicativas y emojis profesionales).
-      - Idioma: Español.
-
-      ${contextoDocumental ? `Base de Conocimiento Recuperada:\n${contextoDocumental}` : 'Nota: Pregunta abierta o sin coincidencia documental directa. Usa tu conocimiento analítico para orientar y dar opciones útiles al usuario.'}
+      ${contextoDocumental ? `DOCUMENTOS RELEVANTES ENCONTRADOS EN EL SISTEMA:\n${contextoDocumental}` : 'NOTA: No se hallaron documentos específicos con alta similitud para esta consulta. Responde como un asistente de IA experto usando tu conocimiento general y guiando al usuario.'}
     `;
 
     // 3. Generación con failover multi-modelo
@@ -124,13 +153,15 @@ export async function consultarRAG(req, res) {
               temperature: 0.7,
             },
           }),
-          3500
+          6500
         );
-        respuestaTexto = chatResponse.text;
-        generadoPorIA = true;
-        break;
+        if (chatResponse && chatResponse.text && chatResponse.text.trim().length > 0) {
+          respuestaTexto = chatResponse.text.trim();
+          generadoPorIA = true;
+          break;
+        }
       } catch (err) {
-        // Intentar siguiente modelo en milisegundos
+        console.warn(`[Chat RAG] Modelo ${modelName} no disponible (${err.message.slice(0, 60)}). Intentando siguiente...`);
       }
     }
 
