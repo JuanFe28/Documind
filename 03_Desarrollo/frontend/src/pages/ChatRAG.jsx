@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, FileText, Bot, User, Loader2, MessageSquare, Trash2, AlertCircle } from 'lucide-react';
-import { chatAPI } from '../services/api';
+import { Send, FileText, Bot, User, Loader2, MessageSquare, Trash2, AlertCircle, Filter } from 'lucide-react';
+import { chatAPI, repositoriesAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 
 function TypingIndicator() {
@@ -79,7 +79,7 @@ function MensajeIA({ respuesta, fuentes }) {
 
 const MENSAJE_BIENVENIDA = {
   tipo: 'ia',
-  respuesta: `¡Hola! Soy **DocuMind**, tu asistente conversacional de documentos empresariales. 🤖\n\nPuedo responder preguntas basadas en los documentos indexados en tus repositorios. Prueba preguntarme:\n\n• ¿Qué penalizaciones tiene el contrato de servicios?\n• ¿Cuál es el valor total de la factura de octubre?\n• ¿Qué tecnologías domina el candidato X?\n\n*Nota: Solo respondo con información de tus documentos cargados, nunca alucino datos.*`,
+  respuesta: `¡Hola! Soy **DocuMind**, tu asistente conversacional de documentos empresariales. 🤖\n\nPuedo responder preguntas basadas en los documentos indexados en tus repositorios. Prueba preguntarme:\n\n• ⚖️ ¿Qué penalizaciones tiene el contrato de servicios oriente?\n• 💵 ¿Cuál es el valor total y fecha de pago de la factura de ESSA?\n• 👥 ¿Qué tecnologías domina Carlos Mendoza y cuántos años de experiencia tiene?\n\n*Nota: Respondo con información exacta y trazable citando las fuentes documentales.*`,
   fuentes: [],
 };
 
@@ -89,7 +89,25 @@ export default function ChatRAG({ selectedRepo }) {
   const [inputText, setInputText] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [repositorios, setRepositorios] = useState([]);
+  const [filtroRepoId, setFiltroRepoId] = useState(selectedRepo ? String(selectedRepo.id) : '');
   const chatEndRef = useRef(null);
+
+  useEffect(() => {
+    const fetchRepos = async () => {
+      try {
+        const res = await repositoriesAPI.list();
+        setRepositorios(res.data.repositorios || []);
+      } catch {}
+    };
+    fetchRepos();
+  }, [user?.id]);
+
+  useEffect(() => {
+    if (selectedRepo) {
+      setFiltroRepoId(String(selectedRepo.id));
+    }
+  }, [selectedRepo]);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -107,18 +125,21 @@ export default function ChatRAG({ selectedRepo }) {
     setLoading(true);
 
     try {
-      const res = await chatAPI.query(query, selectedRepo?.id);
+      const res = await chatAPI.query(query, filtroRepoId ? parseInt(filtroRepoId) : null);
       const { respuesta, fuentes_citadas } = res.data;
 
       setMensajes((prev) => [...prev, { tipo: 'ia', respuesta, fuentes: fuentes_citadas }]);
     } catch (err) {
       const msg = err.response?.data?.mensaje || 'Error en el motor RAG. Intenta nuevamente.';
       setError(msg);
-      setMensajes((prev) => [...prev, {
-        tipo: 'ia',
-        respuesta: `⚠️ Error: ${msg}`,
-        fuentes: [],
-      }]);
+      setMensajes((prev) => [
+        ...prev,
+        {
+          tipo: 'ia',
+          respuesta: `⚠️ ${msg}`,
+          fuentes: [],
+        },
+      ]);
     } finally {
       setLoading(false);
     }
@@ -137,9 +158,10 @@ export default function ChatRAG({ selectedRepo }) {
   };
 
   const preguntasRapidas = [
-    '¿Cuáles son las penalizaciones del contrato?',
-    '¿Qué facturas están pendientes de pago?',
-    '¿Qué habilidades técnicas tiene el candidato?',
+    'Hola, ¿qué puedes hacer por mí?',
+    '¿Cuáles son las penalizaciones del contrato de servicios oriente?',
+    '¿Cuál es el valor y fecha de vencimiento de la factura ESSA?',
+    '¿Qué candidato tiene experiencia en React y cuántos años?',
   ];
 
   return (
@@ -151,19 +173,31 @@ export default function ChatRAG({ selectedRepo }) {
             <span>💬</span> Chat Conversacional RAG Inteligente
           </h1>
           <p className="text-slate-400 text-sm mt-0.5">
-            Realice consultas en lenguaje natural · Base de conocimiento: {selectedRepo ? `📁 ${selectedRepo.nombre}` : '🌐 Todos los repositorios'}
+            Consultas en lenguaje natural con citas y trazabilidad documental
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          {selectedRepo && (
-            <span className="text-xs bg-indigo-50 text-indigo-600 border border-indigo-100 px-3 py-1 rounded-full font-medium">
-              📁 {selectedRepo.nombre}
-            </span>
-          )}
+        <div className="flex items-center gap-3">
+          {/* Selector de Repositorio en Chat */}
+          <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs text-slate-700">
+            <Filter className="w-3.5 h-3.5 text-indigo-500" />
+            <select
+              value={filtroRepoId}
+              onChange={(e) => setFiltroRepoId(e.target.value)}
+              className="bg-transparent border-none outline-none text-xs font-medium text-slate-700 cursor-pointer"
+            >
+              <option value="">🌐 Todos los Repositorios</option>
+              {repositorios.map((r) => (
+                <option key={r.id} value={r.id}>
+                  📁 {r.nombre} ({r.departamento})
+                </option>
+              ))}
+            </select>
+          </div>
+
           <button
             id="btn-limpiar-chat"
             onClick={limpiarChat}
-            className="flex items-center gap-1.5 text-slate-400 hover:text-rose-500 text-xs font-medium transition-colors px-3 py-2 rounded-lg hover:bg-rose-50"
+            className="flex items-center gap-1.5 text-slate-400 hover:text-rose-500 text-xs font-medium transition-colors px-3 py-1.5 rounded-lg hover:bg-rose-50 border border-transparent hover:border-rose-100"
             title="Limpiar conversación"
           >
             <Trash2 className="w-3.5 h-3.5" />
@@ -185,7 +219,7 @@ export default function ChatRAG({ selectedRepo }) {
         <div ref={chatEndRef} />
       </div>
 
-      {/* Sugerencias rápidas (solo cuando hay pocas mensajes) */}
+      {/* Sugerencias rápidas (cuando hay pocos mensajes) */}
       {mensajes.length <= 1 && !loading && (
         <div className="px-8 pb-4 flex-shrink-0">
           <div className="flex gap-2 flex-wrap">
@@ -193,8 +227,10 @@ export default function ChatRAG({ selectedRepo }) {
               <button
                 key={i}
                 id={`sugerencia-${i}`}
-                onClick={() => { setInputText(p); }}
-                className="text-xs text-indigo-600 bg-indigo-50 hover:bg-indigo-100 border border-indigo-100 px-3 py-2 rounded-full transition-colors"
+                onClick={() => {
+                  setInputText(p);
+                }}
+                className="text-xs text-indigo-600 bg-indigo-50 hover:bg-indigo-100 border border-indigo-100 px-3.5 py-2 rounded-full transition-all hover:scale-[1.02] shadow-sm"
               >
                 {p}
               </button>
@@ -220,24 +256,23 @@ export default function ChatRAG({ selectedRepo }) {
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder={`Escriba su consulta en lenguaje natural sobre sus repositorios (ej: ¿Cuáles facturas vencen este mes?)${!selectedRepo ? ' — Filtrando en todos los repositorios' : ` — Filtrando en "${selectedRepo.nombre}"`}`}
-            disabled={loading}
+            placeholder="Escriba su consulta aquí (ej: '¿Cuáles son las cláusulas penales del contrato?' o 'Hola')..."
             rows={1}
-            className="flex-1 bg-transparent px-2 text-sm text-slate-700 outline-none resize-none placeholder-slate-400 py-2 max-h-32"
-            style={{ fieldSizing: 'content' }}
+            disabled={loading}
+            className="flex-1 bg-transparent resize-none border-none outline-none text-sm text-slate-700 placeholder-slate-400 py-1.5"
           />
           <button
             id="btn-enviar-chat"
             onClick={handleSend}
-            disabled={loading || !inputText.trim()}
-            className="bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 disabled:cursor-not-allowed text-white py-2 px-5 rounded-xl font-semibold flex items-center gap-2 transition-all duration-200 shadow-sm hover:shadow-emerald-200"
+            disabled={!inputText.trim() || loading}
+            className="btn-primary p-2.5 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed flex-shrink-0"
+            title="Enviar mensaje (Enter)"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-            <span className="text-sm">Enviar</span>
           </button>
         </div>
-        <p className="text-center text-[10px] text-slate-300 mt-2">
-          Enter para enviar · Shift+Enter para nueva línea · Los resultados se basan estrictamente en tus documentos indexados
+        <p className="text-center text-[11px] text-slate-400 mt-2">
+          Presione <kbd className="px-1.5 py-0.5 bg-slate-100 border border-slate-200 rounded text-[10px]">Enter</kbd> para enviar · <kbd className="px-1.5 py-0.5 bg-slate-100 border border-slate-200 rounded text-[10px]">Shift + Enter</kbd> para salto de línea
         </p>
       </div>
     </div>
