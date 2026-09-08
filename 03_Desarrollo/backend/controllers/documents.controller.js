@@ -123,11 +123,12 @@ export async function uploadDocumento(req, res) {
     }
 
     // 2. Registrar documento en MySQL con estado PROCESANDO
+    const url_relativa = `/uploads/${req.file.filename}`;
     const insertResult = await db.query(
       `INSERT INTO documentos 
         (nombre_archivo, url_descarga, tipo_formato, tamaño_bytes, estado_procesamiento, repositorio_id) 
        VALUES (?, ?, ?, ?, 'PROCESANDO', ?)`,
-      [nombreArchivo, filePath, extension.replace('.', '').toUpperCase(), tamañoBytes, repositorio_id]
+      [nombreArchivo, url_relativa, extension.replace('.', '').toUpperCase(), tamañoBytes, repositorio_id]
     );
     documentoId = insertResult.insertId;
 
@@ -155,7 +156,7 @@ export async function uploadDocumento(req, res) {
       });
     }
 
-    await upsertChunks(chunksConEmbedding, documentoId, parseInt(repositorio_id), nombreArchivo);
+    await upsertChunks(chunksConEmbedding, documentoId, parseInt(repositorio_id), nombreArchivo, url_relativa);
 
     // 7. Guardar metadatos en MySQL y actualizar estado a COMPLETADO
     await db.query(
@@ -173,8 +174,8 @@ export async function uploadDocumento(req, res) {
       [analisis.categoria_detectada, analisis.score_confianza, analisis.resumen_ia, documentoId]
     );
 
-    // Eliminar archivo temporal
-    fs.unlinkSync(filePath);
+    // Mantener archivo temporal para previsualización (Document Viewer)
+    // fs.unlinkSync(filePath);
 
     const [docActualizado] = await db.query('SELECT * FROM documentos WHERE id = ?', [documentoId]);
 

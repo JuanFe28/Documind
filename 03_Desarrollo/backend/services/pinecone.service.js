@@ -28,7 +28,7 @@ function getIndex() {
  * @param {number} repositorioId - ID del repositorio en MySQL
  * @param {string} nombreArchivo - Nombre del archivo para trazabilidad
  */
-export async function upsertChunks(chunks, documentoId, repositorioId, nombreArchivo) {
+export async function upsertChunks(chunks, documentoId, repositorioId, nombreArchivo, urlDescarga) {
   const index = getIndex();
 
   const vectors = chunks.map((chunk, i) => ({
@@ -38,7 +38,8 @@ export async function upsertChunks(chunks, documentoId, repositorioId, nombreArc
       documento_id: documentoId,
       repositorio_id: repositorioId,
       nombre_archivo: nombreArchivo,
-      text_chunk: chunk.texto.slice(0, 1000), // Pinecone limita metadata strings
+      url_descarga: urlDescarga || '',  // Ruta real con timestamp para el Visor
+      text_chunk: chunk.texto.slice(0, 1000),
       page_num: chunk.pageNum || 1,
     },
   }));

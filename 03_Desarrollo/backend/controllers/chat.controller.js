@@ -90,23 +90,23 @@ function generarRespuestaAnaliticaRespaldo(match, query) {
  * Motor conversacional inteligente, fluido y generador de alternativas con IA.
  */
 export async function consultarRAG(req, res) {
-  const { query, repositorio_id } = req.body;
+  const { query, repositorio_id, thread_id } = req.body;
 
   if (!query || query.trim().length === 0) {
     return res.status(400).json({ ok: false, mensaje: 'La consulta no puede estar vacía.' });
   }
 
   try {
-    // 1. Vectorizar la consulta y buscar contexto en Pinecone
+    // 1. Vectorizar la consulta y buscar contexto en Pinecone (top_k=12 para cubrir más documentos)
     const queryVector = await generarEmbeddingGoogle(query);
-    let matches = await queryVectores(queryVector, repositorio_id ? parseInt(repositorio_id) : null, 4);
+    let matches = await queryVectores(queryVector, repositorio_id ? parseInt(repositorio_id) : null, 12);
 
     // Búsqueda global si el repo local no contiene coincidencias
     if (matches.length === 0 && repositorio_id) {
-      matches = await queryVectores(queryVector, null, 4);
+      matches = await queryVectores(queryVector, null, 12);
     }
 
-    const MIN_SCORE = 0.58;
+    const MIN_SCORE = 0.50; // Umbral más permisivo para recuperar más contexto
     const relevantMatches = matches.filter((m) => m.score >= MIN_SCORE);
 
     let contextoDocumental = '';
@@ -174,12 +174,28 @@ export async function consultarRAG(req, res) {
     }
 
     // 4. Mapear fuentes citadas para el frontend
+    // url_descarga viene directamente del metadata de Pinecone (guardada al indexar)
     const fuentesCitadas = relevantMatches.map((match) => ({
       documento_id: match.metadata.documento_id,
       nombre_archivo: match.metadata.nombre_archivo,
-      pagina: match.metadata.page_num,
+      url_descarga: match.metadata.url_descarga || null,
+      pagina: match.metadata.page_num || 1,
       score: match.score,
     }));
+
+    // 5. Guardar en el historial si hay thread_id
+    if (thread_id) {
+      // Mensaje de usuario
+      await db.query(
+        'INSERT INTO chat_messages (thread_id, rol, contenido) VALUES (?, ?, ?)',
+        [thread_id, 'user', query]
+      );
+      // Mensaje de IA
+      await db.query(
+        'INSERT INTO chat_messages (thread_id, rol, contenido, fuentes) VALUES (?, ?, ?, ?)',
+        [thread_id, 'ia', respuestaTexto, JSON.stringify(fuentesCitadas)]
+      );
+    }
 
     return res.status(200).json({
       ok: true,
@@ -189,10 +205,132 @@ export async function consultarRAG(req, res) {
   } catch (error) {
     console.error('Error general en Chat RAG:', error);
 
+    const fallbackResponse = generarRespuestaAnaliticaRespaldo(null, query);
+
+    if (thread_id) {
+      try {
+        await db.query('INSERT INTO chat_messages (thread_id, rol, contenido) VALUES (?, ?, ?)', [thread_id, 'user', query]);
+        await db.query('INSERT INTO chat_messages (thread_id, rol, contenido, fuentes) VALUES (?, ?, ?, ?)', [thread_id, 'ia', fallbackResponse, JSON.stringify([])]);
+      } catch (dbErr) {
+        console.error('Error guardando fallback en bd', dbErr);
+      }
+    }
+
     return res.status(200).json({
       ok: true,
-      respuesta: generarRespuestaAnaliticaRespaldo(null, query),
+      respuesta: fallbackResponse,
       fuentes_citadas: [],
     });
+  }
+}
+
+/**
+ * GET /api/chat/threads
+ */
+export async function listarThreads(req, res) {
+  try {
+    const usuarioId = req.user.id;
+    const { repositorio_id } = req.query;
+    
+    let sql = 'SELECT * FROM chat_threads WHERE usuario_id = ?';
+    const params = [usuarioId];
+    
+    if (repositorio_id) {
+      sql += ' AND repositorio_id = ?';
+      params.push(repositorio_id);
+    }
+    
+    sql += ' ORDER BY creado_en DESC';
+    
+    const threads = await db.query(sql, params);
+    res.json({ ok: true, threads });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false, mensaje: 'Error al listar hilos de chat.' });
+  }
+}
+
+/**
+ * POST /api/chat/threads
+ */
+export async function crearThread(req, res) {
+  try {
+    const usuarioId = req.user.id;
+    const { titulo, repositorio_id } = req.body;
+    
+    if (!titulo) return res.status(400).json({ ok: false, mensaje: 'El título es requerido.' });
+    
+    const result = await db.query(
+      'INSERT INTO chat_threads (usuario_id, repositorio_id, titulo) VALUES (?, ?, ?)',
+      [usuarioId, repositorio_id || null, titulo]
+    );
+    
+    const thread = {
+      id: result.insertId,
+      usuario_id: usuarioId,
+      repositorio_id: repositorio_id || null,
+      titulo,
+      creado_en: new Date()
+    };
+    
+    res.status(201).json({ ok: true, thread });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false, mensaje: 'Error al crear hilo de chat.' });
+  }
+}
+
+/**
+ * GET /api/chat/threads/:threadId/messages
+ */
+export async function listarMensajes(req, res) {
+  try {
+    const { threadId } = req.params;
+    
+    const mensajes = await db.query(
+      'SELECT * FROM chat_messages WHERE thread_id = ? ORDER BY creado_en ASC',
+      [threadId]
+    );
+    
+    // Parsear fuentes json
+    const parsedMensajes = mensajes.map(m => {
+      let fuentes = [];
+      if (m.fuentes) {
+        try { fuentes = JSON.parse(m.fuentes); } catch (e) {}
+      }
+      return { ...m, fuentes };
+    });
+    
+    res.json({ ok: true, messages: parsedMensajes });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false, mensaje: 'Error al listar mensajes.' });
+  }
+}
+
+/**
+ * DELETE /api/chat/threads/:threadId
+ */
+export async function eliminarThread(req, res) {
+  try {
+    const { threadId } = req.params;
+    const usuarioId = req.user.id;
+
+    // Verificar que el thread pertenece al usuario
+    const rows = await db.query(
+      'SELECT id FROM chat_threads WHERE id = ? AND usuario_id = ?',
+      [threadId, usuarioId]
+    );
+    if (rows.length === 0) {
+      return res.status(404).json({ ok: false, mensaje: 'Hilo no encontrado.' });
+    }
+
+    // Los mensajes se eliminan en cascada por FK
+    await db.query('DELETE FROM chat_threads WHERE id = ?', [threadId]);
+
+    res.json({ ok: true, mensaje: 'Hilo de chat eliminado correctamente.' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ ok: false, mensaje: 'Error al eliminar hilo.' });
   }
 }

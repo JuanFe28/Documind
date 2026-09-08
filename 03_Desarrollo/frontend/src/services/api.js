@@ -49,8 +49,12 @@ export const documentsAPI = {
 
 // ─── Chat RAG ────────────────────────────────────────────────────────────────
 export const chatAPI = {
-  query: (query, repositorio_id) =>
-    api.post('/chat/query', { query, repositorio_id: repositorio_id || undefined }),
+  query: (query, repositorio_id, thread_id) =>
+    api.post('/chat/query', { query, repositorio_id: repositorio_id || undefined, thread_id }),
+  getThreads: (repositorio_id) => api.get('/chat/threads', { params: { repositorio_id } }),
+  createThread: (titulo, repositorio_id) => api.post('/chat/threads', { titulo, repositorio_id }),
+  getMessages: (threadId) => api.get(`/chat/threads/${threadId}/messages`),
+  deleteThread: (threadId) => api.delete(`/chat/threads/${threadId}`),
 };
 
 // ─── Repositories ────────────────────────────────────────────────────────────

@@ -82,53 +82,58 @@ export default function IngestaDocumental({ selectedRepo }) {
       return;
     }
 
-    const archivo = files[0]; // Procesar uno a la vez
+    const archivosArray = Array.from(files);
     const extensionesPermitidas = ['.pdf', '.docx', '.txt'];
-    const ext = archivo.name.substring(archivo.name.lastIndexOf('.')).toLowerCase();
-
-    if (!extensionesPermitidas.includes(ext)) {
-      setUploadStatus({ tipo: 'error', mensaje: `❌ Formato no permitido: ${ext}. Solo PDF, DOCX y TXT.` });
-      return;
-    }
-
-    if (archivo.size > 15 * 1024 * 1024) {
-      setUploadStatus({ tipo: 'error', mensaje: '❌ El archivo excede el límite de 15 MB.' });
-      return;
-    }
+    let exitosos = 0;
+    let fallidos = 0;
 
     setUploading(true);
-    setUploadProgress(0);
-    setUploadStatus({ tipo: 'info', mensaje: `🔄 Procesando "${archivo.name}" con IA...` });
 
-    // Simular progreso visual mientras espera la respuesta de IA
-    const progressInterval = setInterval(() => {
-      setUploadProgress((prev) => Math.min(prev + Math.random() * 8, 90));
-    }, 500);
+    for (let i = 0; i < archivosArray.length; i++) {
+      const archivo = archivosArray[i];
+      const ext = archivo.name.substring(archivo.name.lastIndexOf('.')).toLowerCase();
 
-    try {
-      const formData = new FormData();
-      formData.append('file', archivo);
-      formData.append('repositorio_id', selectedRepo.id);
+      if (!extensionesPermitidas.includes(ext) || archivo.size > 15 * 1024 * 1024) {
+        fallidos++;
+        continue;
+      }
 
-      const res = await documentsAPI.upload(formData);
-      clearInterval(progressInterval);
-      setUploadProgress(100);
-
-      const { analisis } = res.data;
-      setUploadStatus({
-        tipo: 'success',
-        mensaje: `✅ "${archivo.name}" clasificado como ${analisis.categoria_detectada} (${analisis.score_confianza.toFixed(1)}% confianza). ${analisis.chunks_indexados} fragmentos indexados en Pinecone.`,
-      });
-      await cargarDocumentos();
-    } catch (err) {
-      clearInterval(progressInterval);
-      const msg = err.response?.data?.mensaje || 'Error desconocido en el pipeline.';
-      setUploadStatus({ tipo: 'error', mensaje: `❌ ${msg}` });
-    } finally {
-      setUploading(false);
       setUploadProgress(0);
-      if (fileInputRef.current) fileInputRef.current.value = '';
+      setUploadStatus({ 
+        tipo: 'info', 
+        mensaje: `🔄 Procesando [${i + 1}/${archivosArray.length}] "${archivo.name}" con IA...` 
+      });
+
+      // Simular progreso visual
+      const progressInterval = setInterval(() => {
+        setUploadProgress((prev) => Math.min(prev + Math.random() * 8, 90));
+      }, 500);
+
+      try {
+        const formData = new FormData();
+        formData.append('file', archivo);
+        formData.append('repositorio_id', selectedRepo.id);
+
+        await documentsAPI.upload(formData);
+        exitosos++;
+      } catch (err) {
+        fallidos++;
+      } finally {
+        clearInterval(progressInterval);
+        setUploadProgress(100);
+      }
     }
+
+    setUploading(false);
+    setUploadProgress(0);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+    
+    setUploadStatus({
+      tipo: fallidos === 0 ? 'success' : (exitosos === 0 ? 'error' : 'info'),
+      mensaje: `✅ Proceso completado. ${exitosos} archivos indexados. ` + (fallidos > 0 ? `❌ ${fallidos} fallidos.` : '')
+    });
+    
+    await cargarDocumentos();
   };
 
   const handleDrop = (e) => {
@@ -217,6 +222,7 @@ export default function IngestaDocumental({ selectedRepo }) {
           ref={fileInputRef}
           type="file"
           accept=".pdf,.docx,.txt"
+          multiple
           onChange={handleFileChange}
           className="hidden"
           disabled={uploading}
@@ -466,6 +472,17 @@ export default function IngestaDocumental({ selectedRepo }) {
                 <div className="bg-slate-50 p-2.5 rounded-lg"><span className="text-slate-400 block font-medium">Estado:</span> <span className="font-semibold text-emerald-600">{docDetalle.estado_procesamiento}</span></div>
                 <div className="bg-slate-50 p-2.5 rounded-lg"><span className="text-slate-400 block font-medium">Cargado:</span> <span className="font-semibold text-slate-700">{formatFecha(docDetalle.creado_en)}</span></div>
               </div>
+
+              {/* Visor de Documento embebido */}
+              {docDetalle.url_descarga && docDetalle.tipo_formato === 'PDF' && (
+                <div className="mt-4 border border-slate-200 rounded-xl overflow-hidden h-[500px]">
+                  <iframe 
+                    src={`http://localhost:5000${docDetalle.url_descarga}`} 
+                    className="w-full h-full bg-slate-100" 
+                    title="Visor de Documento"
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
